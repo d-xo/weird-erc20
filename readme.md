@@ -84,8 +84,8 @@ rebase procedure for some Uniswap pools
 
 ## Approval Race Protections
 
-Some tokens (e.g. `USDT`, `KNC`) do not allow approving an amount `M > 0` when an existing amount `N
-> 0` is already approved. This is to protect from an ERC20 attack vector described
+Some tokens (e.g. `USDT`, `KNC`) do not allow approving an amount `M > 0` when an existing amount
+`N > 0` is already approved. This is to protect from an ERC20 attack vector described
 [here](https://docs.google.com/document/d/1YLPtQxZu1UAvO9cZ1O2RPXBbT0mooh4DYKjA_jp-RLM/edit#heading=h.b32yfk54vyg9).
 
 [This PR](https://github.com/Uniswap/uniswap-v2-periphery/pull/26#issuecomment-647543138) shows some
@@ -135,7 +135,8 @@ This may trigger unexpected reverts due to overflow, posing a liveness risk to t
 
 ## Revert on Transfer to the Zero Address
 
-Some tokens (e.g. openzeppelin) revert when attempting to transfer to `address(0)`. This may break
-systems that expect to be able to burn tokens by transfering them to `address(0)`.
+Some tokens (e.g. openzeppelin) revert when attempting to transfer to `address(0)`.
+
+This may break systems that expect to be able to burn tokens by transfering them to `address(0)`.
 
 *example*: [RevertToZero](./src/RevertToZero.sol)
