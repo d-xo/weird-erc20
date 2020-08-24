@@ -49,12 +49,19 @@ contract ProxiedToken {
     }
 
     // --- Token ---
-    function transfer(address caller, address dst, uint wad) delegated external returns (bool) {
-        return transferFrom(caller, caller, dst, wad);
+    function transfer(address dst, uint wad) delegated external returns (bool) {
+        return _transferFrom(_getCaller(), _getCaller(), dst, wad);
     }
-    function transferFrom(
+    function transferFrom(address src, address dst, uint wad) delegated external returns (bool) {
+        return _transferFrom(_getCaller(), src, dst, wad);
+    }
+    function approve(address usr, uint wad) delegated external returns (bool) {
+        return _approve(_getCaller(), usr, wad);
+    }
+
+    function _transferFrom(
         address caller, address src, address dst, uint wad
-    ) delegated public returns (bool) {
+    ) internal returns (bool) {
         require(balanceOf[src] >= wad, "insufficient-balance");
         if (src != caller && allowance[src][caller] != uint(-1)) {
             require(allowance[src][caller] >= wad, "insufficient-allowance");
@@ -65,17 +72,25 @@ contract ProxiedToken {
         emit Transfer(src, dst, wad);
         return true;
     }
-    function approve(address caller, address usr, uint wad) delegated external returns (bool) {
+    function _approve(address caller, address usr, uint wad) internal returns (bool) {
         allowance[caller][usr] = wad;
         emit Approval(caller, usr, wad);
         return true;
+    }
+    function _getCaller() internal pure returns (address result) {
+        bytes memory array = msg.data;
+        uint256 index = msg.data.length;
+        assembly {
+            result := and(mload(add(array, index)), 0xffffffffffffffffffffffffffffffffffffffff)
+        }
+        return result;
     }
 }
 
 contract TokenProxy {
     address payable public impl;
-    constructor(address payable _impl) public {
-        impl = _impl;
+    constructor(address _impl) public {
+        impl = payable(_impl);
     }
     fallback() external payable {
         address _impl = impl; // pull impl onto the stack
@@ -83,15 +98,13 @@ contract TokenProxy {
             // get free data pointer
             let ptr := mload(0x40)
 
-            // write the function selector to ptr
-            calldatacopy(ptr, 0, 4)
-            // store msg.sender at ptr + 4
-            mstore(add(ptr, 4), caller())
-            // write the rest of the calldata
-            calldatacopy(add(ptr, 24), 4, sub(calldatasize(), 4))
+            // write calldata to ptr
+            calldatacopy(ptr, 0, calldatasize())
+            // store msg.sender after the calldata
+            mstore(add(ptr, calldatasize()), caller())
 
             // call impl with the contents of ptr as caldata
-            let result := call(gas(), _impl, callvalue(), ptr, add(calldatasize(), 20), 0, 0)
+            let result := call(gas(), _impl, callvalue(), ptr, add(calldatasize(), 32), 0, 0)
 
             // copy the returndata to ptr
             let size := returndatasize()
