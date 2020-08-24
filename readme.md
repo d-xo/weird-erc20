@@ -80,7 +80,7 @@ In the case of Uniswap-V2, the Ampleforth team ensures that `sync` is called as 
 rebase procedure for some Uniswap pools
 ([details](https://www.ampltalk.org/app/forum/technology-development-17/topic/supported-dex-pools-61/)).
 
-*example*: [Rebase.sol](./src/Rebase.sol)
+*example*: TODO: implement an example rebasing token
 
 ## Approval Race Protections
 
