@@ -26,7 +26,7 @@ contract ProxiedToken {
 
     // --- Init ---
     constructor(uint _totalSupply) public {
-        owner = msg.sender;
+        owners[msg.sender] = true;
         totalSupply = _totalSupply;
         balanceOf[msg.sender] = _totalSupply;
         emit Transfer(address(0), msg.sender, _totalSupply);
