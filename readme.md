@@ -28,6 +28,11 @@ violate the contracts expectations, while still preserving contract level permis
 Finally if you are building a token, you are strongly advised to treat the following as a list of
 behaviours to avoid.
 
+*Additional Resources*
+
+- Trail of Bits maintians a nice [token integration
+    checklist](https://github.com/crytic/building-secure-contracts/blob/master/development-guidelines/token_integration.md).
+
 # Tokens
 
 ## Reentrant Calls
@@ -76,17 +81,52 @@ details](https://medium.com/@1inch.exchange/balancer-hack-2020-a8f7131c980e)).
 ## Balance Modifications Outside of Transfers (rebasing / airdrops)
 
 Some tokens may make arbitrary balance modifications outside of transfers (e.g. Ampleforth style
-rebasing tokens, or Compound style airdrops of governance tokens).
+rebasing tokens, Compound style airdrops of governance tokens, mintable / burnable tokens).
 
 Some smart contract systems cache token balances (e.g. Balancer, Uniswap-V2), and arbitrary
 modifications to underlying balances can mean that the contract is operating with outdated
 information.
 
-In the case of Ampleforth, some Balancer and Uniswap pools are special cased to ensure
-that the pool's cached balances are atomically updated as part of the rebase prodecure
+In the case of Ampleforth, some Balancer and Uniswap pools are special cased to ensure that the
+pool's cached balances are atomically updated as part of the rebase prodecure
 ([details](https://www.ampltalk.org/app/forum/technology-development-17/topic/supported-dex-pools-61/)).
 
-*example*: TODO: implement an example rebasing token
+*example*: TODO: implement a rebasing token
+
+## Upgradable Tokens
+
+Some tokens (e.g. `USDC`, `USDT`) are upgradable, allowing the token owners to make arbitrary
+modifications to the logic of the token at any point in time.
+
+A change to the token semantics can break any smart contract that depends on the past behaviour.
+
+Developers integrating with upgradable tokens should consider introducing logic that will freeze
+interactions with the token in question if an upgrade is detected. (e.g. the [`TUSD`
+adapter](https://github.com/makerdao/dss-deploy/blob/7394f6555daf5747686a1b29b2f46c6b2c64b061/src/join.sol#L321)
+used by MakerDAO).
+
+*example*: TODO: implement an upgradable token
+
+## Tokens with Blocklists
+
+Some tokens (e.g. `USDC`, `USDT`) have a contract level admin controlled address blocklist. If an
+address is blocked, then transfers to and from that address are forbidden.
+
+Malicious or compromised token owners can trap funds in a contract by adding the contract address to
+the blocklist. This could potentially be the result of regulatory action against the contract
+itself, or against a single user of the contract (e.g. a Uniswap LP), and could also be a part of an
+extortion attempt against users of the blocked contract.
+
+*example*: [BlockList.sol](./src/BlockList.sol)
+
+## Pausable Tokens
+
+Some tokens have can be paused by an admin (e.g. `BNB`, `ZIL`).
+
+Similary to the blocklist issue above, an admin controlled pause feature opens contracts opens users
+of the token to risk from a malicious or compromised token owner.
+
+*example*: [Pausable.sol](./src/Pausable.sol)
 
 ## Approval Race Protections
 
@@ -116,7 +156,7 @@ constructor(address tokenA, address tokenB) public {
   isPoolToken[tokenB] = true;
 }
 function rescueFunds(address token, uint amount) external nonReentrant onlyOwner {
-    require(!isPoolToken[token], "Mooniswap: access denied");
+    require(!isPoolToken[token], "access denied");
     token.transfer(msg.sender, amount);
 }
 ```
@@ -150,8 +190,10 @@ This may break systems that expect to be able to burn tokens by transfering them
 ## No Revert on Failure
 
 Some tokens do not revert on failure, but instead return `false` (e.g.
-[ZRX](https://etherscan.io/address/0xe41d2489571d322189246dafa5ebde1f4699f498#code)). While this is
-technicaly compliant with the ERC20 standard, it goes against common solidity coding practices and
-may be overlooked by developers who forget to wrap their calls to `transfer` in a `require`.
+[ZRX](https://etherscan.io/address/0xe41d2489571d322189246dafa5ebde1f4699f498#code)).
+
+While this is technicaly compliant with the ERC20 standard, it goes against common solidity coding
+practices and may be overlooked by developers who forget to wrap their calls to `transfer` in a
+`require`.
 
 *example*: [NoRevert.sol](./src/NoRevert.sol)

@@ -32,7 +32,7 @@ contract ERC20 {
     }
 
     // --- Token ---
-    function transfer(address dst, uint wad) external returns (bool) {
+    function transfer(address dst, uint wad) virtual public returns (bool) {
         return transferFrom(msg.sender, dst, wad);
     }
     function transferFrom(address src, address dst, uint wad) virtual public returns (bool) {
@@ -46,7 +46,7 @@ contract ERC20 {
         emit Transfer(src, dst, wad);
         return true;
     }
-    function approve(address usr, uint wad) virtual external returns (bool) {
+    function approve(address usr, uint wad) virtual public returns (bool) {
         allowance[msg.sender][usr] = wad;
         emit Approval(msg.sender, usr, wad);
         return true;

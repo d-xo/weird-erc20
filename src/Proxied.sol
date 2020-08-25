@@ -3,6 +3,17 @@
 
 pragma solidity ^0.6.12;
 
+/*
+    Provides two contracts:
+
+    1. ProxiedToken: The underlying token, state modifications must be made through a proxy
+    2. TokenProxy: Proxy contract, appends the original msg.sender to any calldata provided by the user
+
+    The ProxiedToken can have many trusted frontends (TokenProxy's).
+    The frontends should append the address of their caller to calldata when calling into the backend.
+    Admin users of the ProxiedToken can add new delegators.
+*/
+
 contract ProxiedToken {
     // --- ERC20 Data ---
     string  public constant name = "Token";
@@ -26,25 +37,21 @@ contract ProxiedToken {
 
     // --- Init ---
     constructor(uint _totalSupply) public {
-        owners[msg.sender] = true;
+        admin[msg.sender] = true;
         totalSupply = _totalSupply;
         balanceOf[msg.sender] = _totalSupply;
         emit Transfer(address(0), msg.sender, _totalSupply);
     }
 
     // --- Access Control ---
-    mapping(address => bool) public owners;
+    mapping(address => bool) public admin;
+    function rely(address usr) external auth { admin[usr] = true; }
+    function deny(address usr) external auth { admin[usr] = false; }
+    modifier auth() { require(admin[msg.sender], "non-admin-call"); _; }
+
     mapping(address => bool) public delegators;
-
-    modifier onlyOwner() { require(owners[msg.sender], "non-owner-call"); _; }
     modifier delegated() { require(delegators[msg.sender], "non-delegator-call"); _; }
-
-    function setOwner(address owner, bool status) external onlyOwner
-    {
-        owners[owner] = status;
-    }
-    function setDelegator(address delegator, bool status) external onlyOwner
-    {
+    function setDelegator(address delegator, bool status) external auth {
         delegators[delegator] = status;
     }
 
@@ -59,6 +66,7 @@ contract ProxiedToken {
         return _approve(_getCaller(), usr, wad);
     }
 
+    // --- Internals ---
     function _transferFrom(
         address caller, address src, address dst, uint wad
     ) internal returns (bool) {
@@ -77,6 +85,8 @@ contract ProxiedToken {
         emit Approval(caller, usr, wad);
         return true;
     }
+    // grabs the first word after the calldata and masks it with 20bytes of 1's
+    // to turn it into an address
     function _getCaller() internal pure returns (address result) {
         bytes memory array = msg.data;
         uint256 index = msg.data.length;
@@ -88,7 +98,7 @@ contract ProxiedToken {
 }
 
 contract TokenProxy {
-    address payable public impl;
+    address payable immutable public impl;
     constructor(address _impl) public {
         impl = payable(_impl);
     }

@@ -10,10 +10,8 @@ contract ApprovalRaceToken is ERC20 {
     constructor(uint _totalSupply) ERC20(_totalSupply) public {}
 
     // --- Token ---
-    function approve(address usr, uint wad) override external returns (bool) {
+    function approve(address usr, uint wad) override public returns (bool) {
         require(allowance[msg.sender][usr] == 0, "unsafe-approve");
-        allowance[msg.sender][usr] = wad;
-        emit Approval(msg.sender, usr, wad);
-        return true;
+        return super.approve(usr, wad);
     }
 }
