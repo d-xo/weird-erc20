@@ -73,16 +73,17 @@ details](https://medium.com/@1inch.exchange/balancer-hack-2020-a8f7131c980e)).
 
 *example*: [TransferFee.sol](./src/TransferFee.sol)
 
-## Balance Modifications Outside of Transfers (a.k.a rebasing)
+## Balance Modifications Outside of Transfers (rebasing / airdrops)
 
-Some tokens may make arbitrary balance modifications outside of transfers (e.g. Ampleforth style rebasing tokens).
+Some tokens may make arbitrary balance modifications outside of transfers (e.g. Ampleforth style
+rebasing tokens, or Compound style airdrops of governance tokens).
 
 Some smart contract systems cache token balances (e.g. Balancer, Uniswap-V2), and arbitrary
 modifications to underlying balances can mean that the contract is operating with outdated
 information.
 
-In the case of Uniswap-V2, the Ampleforth team ensures that `sync` is called as part of the
-rebase procedure for some Uniswap pools
+In the case of Ampleforth, some Balancer and Uniswap pools are special cased to ensure
+that the pool's cached balances are atomically updated as part of the rebase prodecure
 ([details](https://www.ampltalk.org/app/forum/technology-development-17/topic/supported-dex-pools-61/)).
 
 *example*: TODO: implement an example rebasing token
