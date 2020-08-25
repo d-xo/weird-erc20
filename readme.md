@@ -123,7 +123,7 @@ extortion attempt against users of the blocked contract.
 
 Some tokens can be paused by an admin (e.g. `BNB`, `ZIL`).
 
-Similary to the blocklist issue above, an admin controlled pause feature opens contracts opens users
+Similary to the blocklist issue above, an admin controlled pause feature opens users
 of the token to risk from a malicious or compromised token owner.
 
 *example*: [Pausable.sol](./src/Pausable.sol)
