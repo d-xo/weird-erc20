@@ -1,5 +1,10 @@
 # Weird ERC20 Tokens
 
+This repository contains minimal example implementations in Solidity of ERC20 tokens with behaviour
+that may be surprising or unexpected. All the tokens in this repo are based on real tokens, many of
+which have been used to exploit smart contract systems in the past. It is hoped that these example
+implementations will be of use to developers and auditors.
+
 The `ERC20` "specification" is so loosely defined that it amounts to little more than an interface
 declaration, and even the few semantic requirements that are imposed are routinely violated by token
 developers in the wild.
@@ -19,11 +24,6 @@ governance system), and in these cases developers must take great care to make t
 a highly defensive manner. It should be noted that even if an onchain allowlist is not feasible, an
 offchain allowlist in the official UI can also protect unsophisticated users from tokens that
 violate the contracts expectations, while still preserving contract level permisionlessness.
-
-This repository contains minimal example implementations in Solidity of ERC20 tokens with behaviour
-that may be surprising or unexpected. All the tokens in this repo are based on real tokens, many of
-which have been used to exploit smart contract systems in the past. It is hoped that these example
-implementations will be of use to developers and auditors.
 
 Finally if you are building a token, you are strongly advised to treat the following as a list of
 behaviours to avoid.
@@ -53,8 +53,13 @@ Some particulary pathological tokens (e.g. Tether Gold) declare a bool return, b
 `false` even when the transfer was successful
 ([code](https://etherscan.io/address/0x4922a015c4407f87432b179bb209e125432e4a2a#code)).
 
-The example token below returns `true` from a successful to `transfer`, but does not return anything
-from a successful call to `transferFrom`.
+A good safe transfer abstraction
+([example](https://github.com/Uniswap/uniswap-v2-core/blob/4dd59067c76dea4a0e8e4bfdda41877a6b16dedc/contracts/UniswapV2Pair.sol#L44))
+can help somewhat, but note that the existance of Tether Gold makes it impossible to correctly handle
+return values for all tokens.
+
+  The example token below emulates `BNB` and returns `true` from a successful to `transferFrom`, but
+does not return anything from a successful call to `transfer`.
 
 *example*: [MissingReturns.sol](./src/MissingReturns.sol)
 
@@ -139,4 +144,13 @@ Some tokens (e.g. openzeppelin) revert when attempting to transfer to `address(0
 
 This may break systems that expect to be able to burn tokens by transfering them to `address(0)`.
 
-*example*: [RevertToZero](./src/RevertToZero.sol)
+*example*: [RevertToZero.sol](./src/RevertToZero.sol)
+
+## No Revert on Failure
+
+Some tokens do not revert on failure, but instead return `false` (e.g.
+[ZRX](https://etherscan.io/address/0xe41d2489571d322189246dafa5ebde1f4699f498#code)). While this is
+technicaly compliant with the ERC20 standard, it goes against common solidity coding practices and
+may be overlooked by developers who forget to wrap their calls to `transfer` in a `require`.
+
+*example*: [NoRevert.sol](./src/NoRevert.sol)

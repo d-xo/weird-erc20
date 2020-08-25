@@ -3,11 +3,11 @@
 
 pragma solidity ^0.6.12;
 
-contract MissingReturnToken {
+contract NoRevertToken {
     // --- ERC20 Data ---
     string  public constant name = "Token";
     string  public constant symbol = "TKN";
-    uint8   public constant decimals = 18;
+    uint8   public decimals = 18;
     uint256 public totalSupply;
 
     mapping (address => uint)                      public balanceOf;
@@ -32,13 +32,14 @@ contract MissingReturnToken {
     }
 
     // --- Token ---
-    function transfer(address dst, uint wad) external {
-        transferFrom(msg.sender, dst, wad);
+    function transfer(address dst, uint wad) external returns (bool) {
+        return transferFrom(msg.sender, dst, wad);
     }
-    function transferFrom(address src, address dst, uint wad) public returns (bool) {
-        require(balanceOf[src] >= wad, "insufficient-balance");
+    function transferFrom(address src, address dst, uint wad) virtual public returns (bool) {
+        if (balanceOf[src] >= wad) return false; // insufficient src bal
+        if (balanceOf[dst] >= (type(uint256).max - wad)) return false; // dst bal too high
         if (src != msg.sender && allowance[src][msg.sender] != uint(-1)) {
-            require(allowance[src][msg.sender] >= wad, "insufficient-allowance");
+            if (allowance[src][msg.sender] >= wad) return false; // insufficient allowance
             allowance[src][msg.sender] = sub(allowance[src][msg.sender], wad);
         }
         balanceOf[src] = sub(balanceOf[src], wad);
@@ -46,7 +47,7 @@ contract MissingReturnToken {
         emit Transfer(src, dst, wad);
         return true;
     }
-    function approve(address usr, uint wad) external returns (bool) {
+    function approve(address usr, uint wad) virtual external returns (bool) {
         allowance[msg.sender][usr] = wad;
         emit Approval(msg.sender, usr, wad);
         return true;
