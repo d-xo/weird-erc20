@@ -114,7 +114,7 @@ address is blocked, then transfers to and from that address are forbidden.
 
 Malicious or compromised token owners can trap funds in a contract by adding the contract address to
 the blocklist. This could potentially be the result of regulatory action against the contract
-itself, or against a single user of the contract (e.g. a Uniswap LP), and could also be a part of an
+itself, against a single user of the contract (e.g. a Uniswap LP), or could also be a part of an
 extortion attempt against users of the blocked contract.
 
 *example*: [BlockList.sol](./src/BlockList.sol)

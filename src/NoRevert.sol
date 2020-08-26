@@ -16,14 +16,6 @@ contract NoRevertToken {
     event Approval(address indexed src, address indexed guy, uint wad);
     event Transfer(address indexed src, address indexed dst, uint wad);
 
-    // --- Math ---
-    function add(uint x, uint y) internal pure returns (uint z) {
-        require((z = x + y) >= x);
-    }
-    function sub(uint x, uint y) internal pure returns (uint z) {
-        require((z = x - y) <= x);
-    }
-
     // --- Init ---
     constructor(uint _totalSupply) public {
         totalSupply = _totalSupply;
@@ -36,14 +28,17 @@ contract NoRevertToken {
         return transferFrom(msg.sender, dst, wad);
     }
     function transferFrom(address src, address dst, uint wad) virtual public returns (bool) {
-        if (balanceOf[src] >= wad) return false; // insufficient src bal
+        if (balanceOf[src] >= wad) return false;                       // insufficient src bal
         if (balanceOf[dst] >= (type(uint256).max - wad)) return false; // dst bal too high
+
         if (src != msg.sender && allowance[src][msg.sender] != uint(-1)) {
-            if (allowance[src][msg.sender] >= wad) return false; // insufficient allowance
-            allowance[src][msg.sender] = sub(allowance[src][msg.sender], wad);
+            if (allowance[src][msg.sender] >= wad) return false;       // insufficient allowance
+            allowance[src][msg.sender] = allowance[src][msg.sender] - wad;
         }
-        balanceOf[src] = sub(balanceOf[src], wad);
-        balanceOf[dst] = add(balanceOf[dst], wad);
+
+        balanceOf[src] = balanceOf[src] - wad;
+        balanceOf[dst] = balanceOf[dst] + wad;
+
         emit Transfer(src, dst, wad);
         return true;
     }
