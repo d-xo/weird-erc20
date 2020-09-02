@@ -139,6 +139,12 @@ in the wild problems caused by this issue.
 
 *example*: [Approval.sol](./src/Approval.sol)
 
+## Revert on Zero Value Transfers
+
+Some tokens (e.g. `LEND`) revert when transfering a zero value amount.
+
+*example* [RevertZero.sol](./src/RevertZero.sol)
+
 ## Multiple Token Addresses
 
 Some proxied tokens have multiple addresses. For example `TUSD` has two addresses:
