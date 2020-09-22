@@ -107,6 +107,19 @@ used by MakerDAO).
 
 *example*: TODO: implement an upgradable token
 
+## Flash Mintable Tokens
+
+There are some proposed token designs that allow for so called "flash minting", which would allow
+tokens to be minted for the duration of one transaction only, provided they are returned to the
+token contract by the end of the transaction.
+
+This is similar to a flash loan, but does not require the tokens that are to be lent to exist before
+the start of the transaction. A token that can be flash minted could potentially have a total supply
+of max `uint256`.
+
+A proposal to add such a facility to MakerDAO can be found
+[here](https://forum.makerdao.com/t/mip13c3-sp2-declaration-of-intent-dai-flash-mint-module/3635).
+
 ## Tokens with Blocklists
 
 Some tokens (e.g. `USDC`, `USDT`) have a contract level admin controlled address blocklist. If an
@@ -203,3 +216,11 @@ practices and may be overlooked by developers who forget to wrap their calls to 
 `require`.
 
 *example*: [NoRevert.sol](./src/NoRevert.sol)
+
+## Code Injection Via Token Name
+
+Some malicious tokens have been observed to include malicious javascript in their `name` attribute,
+allowing attackers to extract private keys from users who choose to interact with these tokens via
+vulnerable frontends.
+
+This has been used to exploit etherdelta users in the wild ([reference](https://hackernoon.com/how-one-hacker-stole-thousands-of-dollars-worth-of-cryptocurrency-with-a-classic-code-injection-a3aba5d2bff0)).
