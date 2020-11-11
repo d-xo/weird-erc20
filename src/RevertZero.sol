@@ -12,6 +12,6 @@ contract RevertZeroToken is ERC20 {
     // --- Token ---
     function transferFrom(address src, address dst, uint wad) override public returns (bool) {
         require(wad != 0, "zero-value-transfer");
-        return super.approve(usr, wad);
+        return super.transferFrom(src, dst, wad);
     }
 }
