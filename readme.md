@@ -30,8 +30,8 @@ behaviours to avoid.
 
 *Additional Resources*
 
-- Trail of Bits maintians a nice [token integration
-    checklist](https://github.com/crytic/building-secure-contracts/blob/master/development-guidelines/token_integration.md).
+- Trail of Bits [token integration checklist](https://github.com/crytic/building-secure-contracts/blob/master/development-guidelines/token_integration.md).
+- Consensys Diligence [token integration checklist](https://consensys.net/diligence/blog/2020/11/token-interaction-checklist/)
 
 # Tokens
 
