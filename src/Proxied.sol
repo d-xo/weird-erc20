@@ -102,6 +102,9 @@ contract TokenProxy {
     constructor(address _impl) public {
         impl = payable(_impl);
     }
+
+    receive() external payable { revert("don't send me ETH!"); }
+
     fallback() external payable {
         address _impl = impl; // pull impl onto the stack
         assembly {
@@ -127,4 +130,5 @@ contract TokenProxy {
             default { return(ptr, size) }
         }
     }
+
 }

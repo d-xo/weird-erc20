@@ -63,7 +63,7 @@ A good safe transfer abstraction
 can help somewhat, but note that the existance of Tether Gold makes it impossible to correctly handle
 return values for all tokens.
 
-  The example token below emulates `BNB` and returns `true` from a successful to `transferFrom`, but
+  The example token below emulates `BNB` and returns `true` from a successful call to `transferFrom`, but
 does not return anything from a successful call to `transfer`.
 
 *example*: [MissingReturns.sol](./src/MissingReturns.sol)
@@ -105,7 +105,7 @@ interactions with the token in question if an upgrade is detected. (e.g. the [`T
 adapter](https://github.com/makerdao/dss-deploy/blob/7394f6555daf5747686a1b29b2f46c6b2c64b061/src/join.sol#L321)
 used by MakerDAO).
 
-*example*: TODO: implement an upgradable token
+*example*: [Upgradable.sol](./src/Upgradable.sol)
 
 ## Flash Mintable Tokens
 
