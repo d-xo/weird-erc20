@@ -1,14 +1,12 @@
-{ }:
 let
-  pkgs = import (builtins.fetchGit {
-    url = "https://github.com/dapphub/dapptools";
-    ref = "hevm/0.41.0";
-    rev = "34b2799a26623464c4ab8b7900c6b268adf7d36f";
-  }) {};
+  sources = import ./nix/sources.nix;
+  pkgs = import sources.dapptools {};
 in
-pkgs.mkShell {
-  buildInputs = with pkgs; [
-    dapp
-    bashInteractive
-  ];
-}
+  pkgs.mkShell {
+    buildInputs = with pkgs; [
+      dapp
+      niv
+      solc-static-versions.solc_0_6_12
+    ];
+    DAPP_SOLC="solc-0.6.12";
+  }
