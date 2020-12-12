@@ -5,7 +5,7 @@ pragma solidity ^0.6.12;
 
 import {ERC20} from "./ERC20.sol";
 
-contract PausableToken is ERC20 {
+contract BlockableToken is ERC20 {
     // --- Access Control ---
     address owner;
     modifier auth() { require(msg.sender == owner, "unauthorised"); _; }
