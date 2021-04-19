@@ -47,7 +47,7 @@ drained](https://defirate.com/dforce-hack/))
 
 ## Missing Return Values
 
-Some tokens do not return a bool (e.g. `BNB`, `OMG`) on ERC20 methods. see
+Some tokens do not return a bool (e.g. `USDT`, `BNB`, `OMG`) on ERC20 methods. see
 [here](https://gist.githubusercontent.com/lukas-berlin/f587086f139df93d22987049f3d8ebd2/raw/1f937dc8eb1d6018da59881cbc633e01c0286fb0/Tokens%20missing%20return%20values%20in%20transfer) for a comprehensive (if somewhat outdated) list.
 
 Some tokens (e.g. `BNB`) may return a `bool` for some methods, but fail to do so for others.  This
