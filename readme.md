@@ -184,9 +184,9 @@ function rescueFunds(address token, uint amount) external nonReentrant onlyOwner
 
 ## Low Decimals
 
-Some tokens have low decimals (e.g. `USDC` has 6).
+Some tokens have low decimals (e.g. `USDC` has 6). Even more extreme, some tokens like [Gemini USD](https://etherscan.io/token/0x056Fd409E1d7A124BD7017459dFEa2F387b6d5Cd?a=0x5f65f7b609678448494De4C87521CdF6cEf1e932) only have 2 decimals.
 
-This may result in larger than expected precision loss.
+This may result in larger than expected precision loss. 
 
 *example*: [LowDecimals.sol](./src/LowDecimals.sol)
 
