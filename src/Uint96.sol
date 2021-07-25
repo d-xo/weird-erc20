@@ -29,10 +29,10 @@ contract ERC20 {
     }
 
     // --- Init ---
-    constructor(uint96 totalSupply) public {
-        supply = totalSupply;
-        balances[msg.sender] = totalSupply;
-        emit Transfer(address(0), msg.sender, totalSupply);
+    constructor(uint96 _supply) public {
+        supply = _supply;
+        balances[msg.sender] = _supply;
+        emit Transfer(address(0), msg.sender, _supply);
     }
 
     // --- Getters ---
@@ -53,7 +53,7 @@ contract ERC20 {
     function transferFrom(address src, address dst, uint wad) virtual public returns (bool) {
         uint96 amt = safe96(wad);
 
-        if (src != msg.sender && allowances[src][msg.sender] != uint96(-1)) {
+        if (src != msg.sender && allowances[src][msg.sender] != type(uint96).max) {
             allowances[src][msg.sender] = sub(allowances[src][msg.sender], amt);
         }
 
@@ -64,8 +64,8 @@ contract ERC20 {
     }
     function approve(address usr, uint wad) virtual public returns (bool) {
         uint96 amt;
-        if (wad == uint(-1)) {
-            amt = uint96(-1);
+        if (wad == type(uint).max) {
+            amt = type(uint96).max;
         } else {
             amt = safe96(wad);
         }

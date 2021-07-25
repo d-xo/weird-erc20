@@ -7,6 +7,7 @@ in
       dapp
       niv
       solc-static-versions.solc_0_6_12
+      solc-static-versions.solc_0_7_6
+      solc-static-versions.solc_0_8_6
     ];
-    DAPP_SOLC="solc-0.6.12";
   }

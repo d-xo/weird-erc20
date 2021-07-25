@@ -1,6 +1,6 @@
-solc = solc:0.6.12
-
-all    :; dapp --use ${solc} build
-test   :; dapp --use ${solc} test
-debug  :; dapp --use ${solc} debug
-clean  :; dapp clean
+build:
+	export DAPP_SOLC=solc-0.6.12; dapp build
+	export DAPP_SOLC=solc-0.7.6; dapp build
+	export DAPP_SOLC=solc-0.8.6; dapp build
+test:
+	DAPP_SOLC=solc-0.8.6; dapp test

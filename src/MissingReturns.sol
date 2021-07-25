@@ -37,7 +37,7 @@ contract MissingReturnToken {
     }
     function transferFrom(address src, address dst, uint wad) public {
         require(balanceOf[src] >= wad, "insufficient-balance");
-        if (src != msg.sender && allowance[src][msg.sender] != uint(-1)) {
+        if (src != msg.sender && allowance[src][msg.sender] != type(uint).max) {
             require(allowance[src][msg.sender] >= wad, "insufficient-allowance");
             allowance[src][msg.sender] = sub(allowance[src][msg.sender], wad);
         }

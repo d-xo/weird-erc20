@@ -32,23 +32,23 @@ contract ReturnsFalseToken {
     }
 
     // --- Token ---
-    function transfer(address dst, uint wad) external public returns (bool) {
+    function transfer(address dst, uint wad) external returns (bool) {
         return transferFrom(msg.sender, dst, wad);
     }
     function transferFrom(address src, address dst, uint wad) public returns (bool) {
         require(balanceOf[src] >= wad, "insufficient-balance");
-        if (src != msg.sender && allowance[src][msg.sender] != uint(-1)) {
+        if (src != msg.sender && allowance[src][msg.sender] != type(uint).max) {
             require(allowance[src][msg.sender] >= wad, "insufficient-allowance");
             allowance[src][msg.sender] = sub(allowance[src][msg.sender], wad);
         }
         balanceOf[src] = sub(balanceOf[src], wad);
         balanceOf[dst] = add(balanceOf[dst], wad);
         emit Transfer(src, dst, wad);
-        return false
+        return false;
     }
     function approve(address usr, uint wad) external returns (bool) {
         allowance[msg.sender][usr] = wad;
         emit Approval(msg.sender, usr, wad);
-        return false
+        return false;
     }
 }

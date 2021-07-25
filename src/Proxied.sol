@@ -71,7 +71,7 @@ contract ProxiedToken {
         address caller, address src, address dst, uint wad
     ) internal returns (bool) {
         require(balanceOf[src] >= wad, "insufficient-balance");
-        if (src != caller && allowance[src][caller] != uint(-1)) {
+        if (src != caller && allowance[src][caller] != type(uint).max) {
             require(allowance[src][caller] >= wad, "insufficient-allowance");
             allowance[src][caller] = sub(allowance[src][caller], wad);
         }

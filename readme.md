@@ -224,7 +224,7 @@ practices and may be overlooked by developers who forget to wrap their calls to 
 
 Some tokens (e.g. `UNI`, `COMP`) revert if the value passed to `approve` or `transfer` is larger than `uint96`.
 
-Both of the above tokens have special case logic in `approve` that sets `allowance` to `uint96(-1)`
+Both of the above tokens have special case logic in `approve` that sets `allowance` to `type(uint96).max`
 if the approval amount is `uint256(-1)`, which may cause issues with systems that expect the value
 passed to `approve` to be reflected in the `allowances` mapping.
 
