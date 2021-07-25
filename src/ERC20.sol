@@ -1,9 +1,19 @@
 // Copyright (C) 2017, 2018, 2019, 2020 dbrock, rain, mrchico, xvwx
 // SPDX-License-Identifier: AGPL-3.0-only
 
-pragma solidity ^0.6.12;
+pragma solidity >=0.6.12;
 
-contract ERC20 {
+contract Math {
+    // --- Math ---
+    function add(uint x, uint y) internal pure returns (uint z) {
+        require((z = x + y) >= x);
+    }
+    function sub(uint x, uint y) internal pure returns (uint z) {
+        require((z = x - y) <= x);
+    }
+}
+
+contract ERC20 is Math {
     // --- ERC20 Data ---
     string  public constant name = "Token";
     string  public constant symbol = "TKN";
@@ -15,14 +25,6 @@ contract ERC20 {
 
     event Approval(address indexed src, address indexed guy, uint wad);
     event Transfer(address indexed src, address indexed dst, uint wad);
-
-    // --- Math ---
-    function add(uint x, uint y) internal pure returns (uint z) {
-        require((z = x + y) >= x);
-    }
-    function sub(uint x, uint y) internal pure returns (uint z) {
-        require((z = x - y) <= x);
-    }
 
     // --- Init ---
     constructor(uint _totalSupply) public {

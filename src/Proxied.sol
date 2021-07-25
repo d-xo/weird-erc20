@@ -1,7 +1,7 @@
 // Copyright (C) 2017, 2018, 2019, 2020 dbrock, rain, mrchico, xvwx
 // SPDX-License-Identifier: AGPL-3.0-only
 
-pragma solidity ^0.6.12;
+pragma solidity >=0.6.12;
 
 /*
     Provides two contracts:
