@@ -3,7 +3,7 @@
 
 pragma solidity >=0.6.12;
 
-contract NoReturnToken {
+contract ReturnsFalseToken {
     // --- ERC20 Data ---
     string  public constant name = "Token";
     string  public constant symbol = "TKN";
