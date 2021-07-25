@@ -3,7 +3,7 @@
 
 pragma solidity >=0.6.12;
 
-contract MissingReturnToken {
+contract NoReturnToken {
     // --- ERC20 Data ---
     string  public constant name = "Token";
     string  public constant symbol = "TKN";
@@ -32,10 +32,10 @@ contract MissingReturnToken {
     }
 
     // --- Token ---
-    function transfer(address dst, uint wad) external {
-        transferFrom(msg.sender, dst, wad);
+    function transfer(address dst, uint wad) external public returns (bool) {
+        return transferFrom(msg.sender, dst, wad);
     }
-    function transferFrom(address src, address dst, uint wad) public {
+    function transferFrom(address src, address dst, uint wad) public returns (bool) {
         require(balanceOf[src] >= wad, "insufficient-balance");
         if (src != msg.sender && allowance[src][msg.sender] != uint(-1)) {
             require(allowance[src][msg.sender] >= wad, "insufficient-allowance");
@@ -44,9 +44,11 @@ contract MissingReturnToken {
         balanceOf[src] = sub(balanceOf[src], wad);
         balanceOf[dst] = add(balanceOf[dst], wad);
         emit Transfer(src, dst, wad);
+        return false
     }
-    function approve(address usr, uint wad) external {
+    function approve(address usr, uint wad) external returns (bool) {
         allowance[msg.sender][usr] = wad;
         emit Approval(msg.sender, usr, wad);
+        return false
     }
 }

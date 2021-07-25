@@ -63,10 +63,13 @@ A good safe transfer abstraction
 can help somewhat, but note that the existance of Tether Gold makes it impossible to correctly handle
 return values for all tokens.
 
-  The example token below emulates `BNB` and returns `true` from a successful call to `transferFrom`, but
-does not return anything from a successful call to `transfer`.
+Two example tokens are provided:
+
+- `MissingReturns`: does not return a bool for any erc20 operation
+- `ReturnsFalse`: declares a bool return, but then returns false for every erc20 operation
 
 *example*: [MissingReturns.sol](./src/MissingReturns.sol)
+*example*: [ReturnsFalse.sol](./src/ReturnsFalse.sol)
 
 ## Fee on Transfer
 
