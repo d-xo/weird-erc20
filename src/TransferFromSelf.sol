@@ -13,7 +13,7 @@ contract Math {
     }
 }
 
-contract ERC20 is Math {
+contract TransferFromSelfToken is Math {
     // --- ERC20 Data ---
     string  public constant name = "Token";
     string  public constant symbol = "TKN";
