@@ -189,7 +189,7 @@ function rescueFunds(address token, uint amount) external nonReentrant onlyOwner
 
 Some tokens have low decimals (e.g. `USDC` has 6). Even more extreme, some tokens like [Gemini USD](https://etherscan.io/token/0x056Fd409E1d7A124BD7017459dFEa2F387b6d5Cd?a=0x5f65f7b609678448494De4C87521CdF6cEf1e932) only have 2 decimals.
 
-This may result in larger than expected precision loss. 
+This may result in larger than expected precision loss.
 
 *example*: [LowDecimals.sol](./src/LowDecimals.sol)
 
@@ -200,6 +200,18 @@ Some tokens have more than 18 decimals (e.g. `YAM-V2` has 24).
 This may trigger unexpected reverts due to overflow, posing a liveness risk to the contract.
 
 *example*: [HighDecimals.sol](./src/HighDecimals.sol)
+
+
+## Non `string` metadata
+
+Some tokens (e.g.
+[`MKR`](https://etherscan.io/address/0x9f8f72aa9304c8b593d555f12ef6589cc3a579a2#code)) have metadata
+fields (`name` / `symbol`) encoded as `bytes32` instead of the `string` prescribed by the ERC20
+specification.
+
+This may cause issues when trying to consume metadata from these tokens.
+
+*example:*: [Bytes32Metadata.sol](./src/Bytes32Metadata.sol)
 
 ## Revert on Transfer to the Zero Address
 
