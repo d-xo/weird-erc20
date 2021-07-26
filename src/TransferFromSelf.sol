@@ -17,7 +17,7 @@ contract TransferFromSelfToken is Math {
     // --- ERC20 Data ---
     string  public constant name = "Token";
     string  public constant symbol = "TKN";
-    uint8   public decimals = 18;
+    uint8   public constant decimals = 18;
     uint256 public totalSupply;
 
     mapping (address => uint)                      public balanceOf;
