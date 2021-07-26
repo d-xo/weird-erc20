@@ -201,6 +201,21 @@ This may trigger unexpected reverts due to overflow, posing a liveness risk to t
 
 *example*: [HighDecimals.sol](./src/HighDecimals.sol)
 
+## `transferFrom` with `src == msg.sender`
+
+Some token implementations (e.g. `DSToken`) will not attempt to decrease the callers allowance if
+the sender is the same as the caller. This gives `transferFrom` the same semantics as `transfer` in
+this case. Other implementations (e.g. OpenZeppelin, Uniswap-v2) will attempt to decrease the
+callers allowance from the sender in `transferFrom` even if the caller and the sender are the same
+address, giving `transfer(dst, amt)` and `transferFrom(address(this), dst, amt)` a different
+semantics in this case.
+
+*examples*:
+
+Examples of both semantics are provided:
+
+- [ERC20.sol](./src/ERC20.sol): does not attempt to decrease allowance
+- [TransferFromSelf.sol](./src/TransferFromSelf.sol): always attempts to decrease the allowance
 
 ## Non `string` metadata
 
