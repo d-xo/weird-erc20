@@ -14,16 +14,16 @@ least, and smart contract developers should in general default to the following 
 interaction with external code is required:
 
 1. A contract level allowlist of known good tokens.
-2. Direct interaction with tokens should be performmed in dedicated wrapper contracts at the edge of
+2. Direct interaction with tokens should be performed in dedicated wrapper contracts at the edge of
    the system. This allows the core to assume a consistent and known good semantics for the
    behaviour of external assets.
 
-In some cases the above patterns are not practical (for example in the case of a permisionless AMM,
+In some cases the above patterns are not practical (for example in the case of a permissionless AMM,
 keeping an on chain allowlist would require the introduction of centralized control or a complex
 governance system), and in these cases developers must take great care to make these interactions in
 a highly defensive manner. It should be noted that even if an onchain allowlist is not feasible, an
 offchain allowlist in the official UI can also protect unsophisticated users from tokens that
-violate the contracts expectations, while still preserving contract level permisionlessness.
+violate the contracts expectations, while still preserving contract level permissionlessness.
 
 Finally if you are building a token, you are strongly advised to treat the following as a list of
 behaviours to avoid.
@@ -68,7 +68,7 @@ Two example tokens are provided:
 - `MissingReturns`: does not return a bool for any erc20 operation
 - `ReturnsFalse`: declares a bool return, but then returns false for every erc20 operation
 
-*example*: [MissingReturns.sol](./src/MissingReturns.sol)
+*example*: [MissingReturns.sol](./src/MissingReturns.sol)  
 *example*: [ReturnsFalse.sol](./src/ReturnsFalse.sol)
 
 ## Fee on Transfer
@@ -159,7 +159,7 @@ in the wild problems caused by this issue.
 
 Some tokens (e.g. `LEND`) revert when transfering a zero value amount.
 
-*example* [RevertZero.sol](./src/RevertZero.sol)
+*example*: [RevertZero.sol](./src/RevertZero.sol)
 
 ## Multiple Token Addresses
 
@@ -203,10 +203,10 @@ This may trigger unexpected reverts due to overflow, posing a liveness risk to t
 
 ## `transferFrom` with `src == msg.sender`
 
-Some token implementations (e.g. `DSToken`) will not attempt to decrease the callers allowance if
+Some token implementations (e.g. `DSToken`) will not attempt to decrease the caller's allowance if
 the sender is the same as the caller. This gives `transferFrom` the same semantics as `transfer` in
 this case. Other implementations (e.g. OpenZeppelin, Uniswap-v2) will attempt to decrease the
-callers allowance from the sender in `transferFrom` even if the caller and the sender are the same
+caller's allowance from the sender in `transferFrom` even if the caller and the sender are the same
 address, giving `transfer(dst, amt)` and `transferFrom(address(this), dst, amt)` a different
 semantics in this case.
 
@@ -226,7 +226,7 @@ specification.
 
 This may cause issues when trying to consume metadata from these tokens.
 
-*example:*: [Bytes32Metadata.sol](./src/Bytes32Metadata.sol)
+*example*: [Bytes32Metadata.sol](./src/Bytes32Metadata.sol)
 
 ## Revert on Transfer to the Zero Address
 
