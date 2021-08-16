@@ -155,6 +155,15 @@ in the wild problems caused by this issue.
 
 *example*: [Approval.sol](./src/Approval.sol)
 
+## Revert on Approval To Zero Address
+
+Some tokens (e.g. OpenZeppelin) will revert if trying to approve the zero address to spend tokens
+(i.e. a call to `approve(address(0), amt)`).
+
+Integrators may need to add special cases to handle this logic if working with such a token.
+
+*example*: [ApprovalToZero.sol](./src/ApprovalToZero.sol)
+
 ## Revert on Zero Value Transfers
 
 Some tokens (e.g. `LEND`) revert when transfering a zero value amount.
