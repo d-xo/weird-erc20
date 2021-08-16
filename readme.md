@@ -112,16 +112,16 @@ used by MakerDAO).
 
 ## Flash Mintable Tokens
 
-There are some proposed token designs that allow for so called "flash minting", which would allow
-tokens to be minted for the duration of one transaction only, provided they are returned to the
-token contract by the end of the transaction.
+Some tokens (e.g. `DAI`) allow for so called "flash minting", which allows tokens to be minted for the duration
+of one transaction only, provided they are returned to the token contract by the end of the
+transaction.
 
 This is similar to a flash loan, but does not require the tokens that are to be lent to exist before
 the start of the transaction. A token that can be flash minted could potentially have a total supply
 of max `uint256`.
 
-A proposal to add such a facility to MakerDAO can be found
-[here](https://forum.makerdao.com/t/mip13c3-sp2-declaration-of-intent-dai-flash-mint-module/3635).
+Documentation for the MakerDAO flash mint module can be found
+[here](https://docs.makerdao.com/smart-contract-modules/flash-mint-module).
 
 ## Tokens with Blocklists
 
