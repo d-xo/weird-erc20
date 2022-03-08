@@ -172,10 +172,7 @@ Some tokens (e.g. `LEND`) revert when transfering a zero value amount.
 
 ## Multiple Token Addresses
 
-Some proxied tokens have multiple addresses. For example `TUSD` has two addresses:
-`0x8dd5fbCe2F6a956C3022bA3663759011Dd51e73E` and `0x0000000000085d4780B73119b644AE5ecd22b376`
-(calling transfer on either affects your balance on both).
-
+Some proxied tokens have multiple addresses. 
 As an example consider the following snippet. `rescueFunds` is intended to allow the contract owner
 to return non pool tokens that were accidentaly sent to the contract. However, it assumes a single
 address per token and so would allow the owner to steal all funds in the pool.
