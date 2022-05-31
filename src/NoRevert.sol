@@ -28,11 +28,11 @@ contract NoRevertToken {
         return transferFrom(msg.sender, dst, wad);
     }
     function transferFrom(address src, address dst, uint wad) virtual public returns (bool) {
-        if (balanceOf[src] >= wad) return false;                       // insufficient src bal
+        if (balanceOf[src] < wad) return false;                        // insufficient src bal
         if (balanceOf[dst] >= (type(uint256).max - wad)) return false; // dst bal too high
 
         if (src != msg.sender && allowance[src][msg.sender] != type(uint).max) {
-            if (allowance[src][msg.sender] >= wad) return false;       // insufficient allowance
+            if (allowance[src][msg.sender] < wad) return false;        // insufficient allowance
             allowance[src][msg.sender] = allowance[src][msg.sender] - wad;
         }
 
