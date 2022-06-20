@@ -5,7 +5,7 @@ pragma solidity >=0.6.12;
 
 import {ERC20} from "./ERC20.sol";
 
-contract ReentrantToken is ERC20 {
+contract RevertToZeroToken is ERC20 {
     // --- Init ---
     constructor(uint _totalSupply) ERC20(_totalSupply) public {}
 
