@@ -270,3 +270,9 @@ allowing attackers to extract private keys from users who choose to interact wit
 vulnerable frontends.
 
 This has been used to exploit etherdelta users in the wild ([reference](https://hackernoon.com/how-one-hacker-stole-thousands-of-dollars-worth-of-cryptocurrency-with-a-classic-code-injection-a3aba5d2bff0)).
+
+## Unusual Permit Function
+
+Some tokens ([DAI, RAI, GLM, STAKE, CHAI, HAKKA, USDFL, HNY](https://github.com/yashnaman/tokensWithPermitFunctionList/blob/master/hasDAILikePermitFunctionTokenList.json)) have a `permit()` implementation that does not follow [EIP2612](https://eips.ethereum.org/EIPS/eip-2612). Tokens that do not support permit may not revert, which [could lead to the execution of later lines of code in unexpected scenarios](https://media.dedaub.com/phantom-functions-and-the-billion-dollar-no-op-c56f062ae49f). [Uniswap's Permit2](https://github.com/Uniswap/permit2) may provide a more compatible alternative.
+
+*example*: [DaiPermit.sol](./src/DaiPermit.sol)
