@@ -3,7 +3,7 @@
 
 pragma solidity >=0.6.12;
 
-contract ERC20 {
+contract Uint96ERC20 {
     // --- ERC20 Data ---
     string  public constant name = "Token";
     string  public constant symbol = "TKN";
