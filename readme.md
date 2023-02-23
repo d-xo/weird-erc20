@@ -2,29 +2,30 @@
 
 This repository contains minimal example implementations in Solidity of ERC20 tokens with behaviour
 that may be surprising or unexpected. All the tokens in this repo are based on real tokens, many of
-which have been used to exploit smart contract systems in the past. Hopefully, these example
-implementations will be helpful to developers and auditors.
+which have been used to exploit smart contract systems in the past. It is hoped that these example
+implementations will be of use to developers and auditors.
 
 The `ERC20` "specification" is so loosely defined that it amounts to little more than an interface
 declaration, and even the few semantic requirements that are imposed are routinely violated by token
 developers in the wild.
 
 This makes building smart contracts that interface directly with ERC20 tokens challenging to say the
-least, and smart contract developers should, in general, default to the following patterns when
+least, and smart contract developers should in general default to the following patterns when
 interacting with external code is required:
 
 1. A contract level allowlist of known good tokens.
-2. Direct interaction with tokens should be performed in dedicated wrapper contracts at the system's edge. This allows the core to assume consistent and known good semantics for the
+2. Direct interaction with tokens should be performed in dedicated wrapper contracts at the edge of
+   the system. This allows the core to assume a consistent and known good semantics for the
    behaviour of external assets.
 
-In some cases, the above patterns are not practical (for example, in the case of a permissionless AMM,
-keeping an on-chain allowlist would require the introduction of centralized control or a complex
-governance system), and in these cases, developers must take great care to make these interactions in
+In some cases the above patterns are not practical (for example in the case of a permissionless AMM,
+keeping an on chain allowlist would require the introduction of centralized control or a complex
+governance system), and in these cases developers must take great care to make these interactions in
 a highly defensive manner. It should be noted that even if an onchain allowlist is not feasible, an
-off-chain allowlist in the official UI can also protect unsophisticated users from tokens that
+offchain allowlist in the official UI can also protect unsophisticated users from tokens that
 violate the contracts expectations, while still preserving contract level permissionlessness.
 
-Finally, if you are building a token, you are strongly advised to treat the following as a list of
+Finally if you are building a token, you are strongly advised to treat the following as a list of
 behaviours to avoid.
 
 *Additional Resources*
@@ -49,7 +50,7 @@ drained](https://defirate.com/dforce-hack/))
 Some tokens do not return a bool (e.g. `USDT`, `BNB`, `OMG`) on ERC20 methods. see
 [here](https://gist.githubusercontent.com/lukas-berlin/f587086f139df93d22987049f3d8ebd2/raw/1f937dc8eb1d6018da59881cbc633e01c0286fb0/Tokens%20missing%20return%20values%20in%20transfer) for a comprehensive (if somewhat outdated) list.
 
-Some tokens (e.g. `BNB`) may return a `bool` for some methods, but fail to do so for others. This
+Some tokens (e.g. `BNB`) may return a `bool` for some methods, but fail to do so for others.  This
 resulted in stuck `BNB` tokens in Uniswap v1
 ([details](https://mobile.twitter.com/UniswapProtocol/status/1072286773554876416)).
 
@@ -72,7 +73,7 @@ Two example tokens are provided:
 
 ## Fee on Transfer
 
-Some tokens take a transfer fee (e.g. `STA`, `PAXG`), and some do not currently charge a fee but may do
+Some tokens take a transfer fee (e.g. `STA`, `PAXG`), some do not currently charge a fee but may do
 so in the future (e.g. `USDT`, `USDC`).
 
 The `STA` transfer fee was used to drain $500k from several balancer pools ([more
@@ -83,7 +84,7 @@ details](https://medium.com/@1inch.exchange/balancer-hack-2020-a8f7131c980e)).
 ## Balance Modifications Outside of Transfers (rebasing/airdrops)
 
 Some tokens may make arbitrary balance modifications outside of transfers (e.g. Ampleforth style
-rebasing tokens, Compound style airdrops of governance tokens, and mintable/burnable tokens).
+rebasing tokens, Compound style airdrops of governance tokens, mintable/burnable tokens).
 
 Some smart contract systems cache token balances (e.g. Balancer, Uniswap-V2), and arbitrary
 modifications to underlying balances can mean that the contract is operating with outdated
@@ -111,7 +112,7 @@ used by MakerDAO).
 
 ## Flash Mintable Tokens
 
-Some tokens (e.g. `DAI`) allow for so called "flash minting", which will enable tokens to be minted for the duration
+Some tokens (e.g. `DAI`) allow for so called "flash minting", which allows tokens to be minted for the duration
 of one transaction only, provided they are returned to the token contract by the end of the
 transaction.
 
@@ -172,8 +173,8 @@ Some tokens (e.g. `LEND`) revert when transferring a zero value amount.
 ## Multiple Token Addresses
 
 Some proxied tokens have multiple addresses. 
-For example, consider the following snippet. `rescueFunds` is intended to allow the contract owner
-to return non-pool tokens that were accidentally sent to the contract. However, it assumes a single
+As an example consider the following snippet. `rescueFunds` is intended to allow the contract owner
+to return non pool tokens that were accidentally sent to the contract. However, it assumes a single
 address per token and so would allow the owner to steal all funds in the pool.
 
 ```solidity
