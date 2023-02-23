@@ -20,9 +20,19 @@ contract DaiPermit is Math {
     uint8   public decimals = 18;
     uint256 public totalSupply;
 	bytes32 public constant PERMIT_TYPEHASH = 0xea2aa0a1be11a07ed86d755c93467f4f82362b452371d1ba94d1715123511acb;
+	bytes32 public immutable DOMAIN_SEPARATOR = keccak256(
+        abi.encode(
+            keccak256('EIP712Domain(string name,string version,uint256 chainId,address verifyingContract)'),
+            keccak256(bytes(name)),
+            keccak256(bytes('1')),
+            block.chainid,
+            address(this)
+        )
+    );
 
     mapping (address => uint)                      public balanceOf;
     mapping (address => mapping (address => uint)) public allowance;
+    mapping (address => uint)                      public nonces;
 
     event Approval(address indexed src, address indexed guy, uint wad);
     event Transfer(address indexed src, address indexed dst, uint wad);
@@ -71,9 +81,9 @@ contract DaiPermit is Math {
 
         require(holder != address(0), "Dai/invalid-address-0");
         require(holder == ecrecover(digest, v, r, s), "Dai/invalid-permit");
-        require(expiry == 0 || now <= expiry, "Dai/permit-expired");
+        require(expiry == 0 || block.timestamp <= expiry, "Dai/permit-expired");
         require(nonce == nonces[holder]++, "Dai/invalid-nonce");
-        uint wad = allowed ? uint(-1) : 0;
+        uint wad = allowed ? type(uint256).max : 0;
         allowance[holder][spender] = wad;
     }
 }
