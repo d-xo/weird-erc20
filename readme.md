@@ -2,30 +2,29 @@
 
 This repository contains minimal example implementations in Solidity of ERC20 tokens with behaviour
 that may be surprising or unexpected. All the tokens in this repo are based on real tokens, many of
-which have been used to exploit smart contract systems in the past. It is hoped that these example
-implementations will be of use to developers and auditors.
+which have been used to exploit smart contract systems in the past. Hopefully, these example
+implementations will be helpful to developers and auditors.
 
 The `ERC20` "specification" is so loosely defined that it amounts to little more than an interface
 declaration, and even the few semantic requirements that are imposed are routinely violated by token
 developers in the wild.
 
 This makes building smart contracts that interface directly with ERC20 tokens challenging to say the
-least, and smart contract developers should in general default to the following patterns when
-interaction with external code is required:
+least, and smart contract developers should, in general, default to the following patterns when
+interacting with external code is required:
 
 1. A contract level allowlist of known good tokens.
-2. Direct interaction with tokens should be performed in dedicated wrapper contracts at the edge of
-   the system. This allows the core to assume a consistent and known good semantics for the
+2. Direct interaction with tokens should be performed in dedicated wrapper contracts at the system's edge. This allows the core to assume consistent and known good semantics for the
    behaviour of external assets.
 
-In some cases the above patterns are not practical (for example in the case of a permissionless AMM,
-keeping an on chain allowlist would require the introduction of centralized control or a complex
-governance system), and in these cases developers must take great care to make these interactions in
+In some cases, the above patterns are not practical (for example, in the case of a permissionless AMM,
+keeping an on-chain allowlist would require the introduction of centralized control or a complex
+governance system), and in these cases, developers must take great care to make these interactions in
 a highly defensive manner. It should be noted that even if an onchain allowlist is not feasible, an
-offchain allowlist in the official UI can also protect unsophisticated users from tokens that
+off-chain allowlist in the official UI can also protect unsophisticated users from tokens that
 violate the contracts expectations, while still preserving contract level permissionlessness.
 
-Finally if you are building a token, you are strongly advised to treat the following as a list of
+Finally, if you are building a token, you are strongly advised to treat the following as a list of
 behaviours to avoid.
 
 *Additional Resources*
@@ -39,7 +38,7 @@ behaviours to avoid.
 
 Some tokens allow reentrant calls on transfer (e.g. `ERC777` tokens).
 
-This has been exploited in the wild on multiple occasions (e.g. [imBTC uniswap pool
+This has been exploited in the wild on multiple occasions (e.g. [imBTC Uniswap pool
 drained](https://defirate.com/imbtc-uniswap-hack/), [lendf.me
 drained](https://defirate.com/dforce-hack/))
 
@@ -50,17 +49,17 @@ drained](https://defirate.com/dforce-hack/))
 Some tokens do not return a bool (e.g. `USDT`, `BNB`, `OMG`) on ERC20 methods. see
 [here](https://gist.githubusercontent.com/lukas-berlin/f587086f139df93d22987049f3d8ebd2/raw/1f937dc8eb1d6018da59881cbc633e01c0286fb0/Tokens%20missing%20return%20values%20in%20transfer) for a comprehensive (if somewhat outdated) list.
 
-Some tokens (e.g. `BNB`) may return a `bool` for some methods, but fail to do so for others.  This
+Some tokens (e.g. `BNB`) may return a `bool` for some methods, but fail to do so for others. This
 resulted in stuck `BNB` tokens in Uniswap v1
 ([details](https://mobile.twitter.com/UniswapProtocol/status/1072286773554876416)).
 
-Some particulary pathological tokens (e.g. Tether Gold) declare a bool return, but then return
+Some particularly pathological tokens (e.g. Tether Gold) declare a bool return, but then return
 `false` even when the transfer was successful
 ([code](https://etherscan.io/address/0x4922a015c4407f87432b179bb209e125432e4a2a#code)).
 
 A good safe transfer abstraction
 ([example](https://github.com/Uniswap/uniswap-v2-core/blob/4dd59067c76dea4a0e8e4bfdda41877a6b16dedc/contracts/UniswapV2Pair.sol#L44))
-can help somewhat, but note that the existance of Tether Gold makes it impossible to correctly handle
+can help somewhat, but note that the existence of Tether Gold makes it impossible to correctly handle
 return values for all tokens.
 
 Two example tokens are provided:
@@ -73,7 +72,7 @@ Two example tokens are provided:
 
 ## Fee on Transfer
 
-Some tokens take a transfer fee (e.g. `STA`, `PAXG`), some do not currently charge a fee but may do
+Some tokens take a transfer fee (e.g. `STA`, `PAXG`), and some do not currently charge a fee but may do
 so in the future (e.g. `USDT`, `USDC`).
 
 The `STA` transfer fee was used to drain $500k from several balancer pools ([more
@@ -81,17 +80,17 @@ details](https://medium.com/@1inch.exchange/balancer-hack-2020-a8f7131c980e)).
 
 *example*: [TransferFee.sol](./src/TransferFee.sol)
 
-## Balance Modifications Outside of Transfers (rebasing / airdrops)
+## Balance Modifications Outside of Transfers (rebasing/airdrops)
 
 Some tokens may make arbitrary balance modifications outside of transfers (e.g. Ampleforth style
-rebasing tokens, Compound style airdrops of governance tokens, mintable / burnable tokens).
+rebasing tokens, Compound style airdrops of governance tokens, and mintable/burnable tokens).
 
 Some smart contract systems cache token balances (e.g. Balancer, Uniswap-V2), and arbitrary
 modifications to underlying balances can mean that the contract is operating with outdated
 information.
 
 In the case of Ampleforth, some Balancer and Uniswap pools are special cased to ensure that the
-pool's cached balances are atomically updated as part of the rebase prodecure
+pool's cached balances are atomically updated as part of the rebase procedure
 ([details](https://www.ampltalk.org/app/forum/technology-development-17/topic/supported-dex-pools-61/)).
 
 *example*: TODO: implement a rebasing token
@@ -112,7 +111,7 @@ used by MakerDAO).
 
 ## Flash Mintable Tokens
 
-Some tokens (e.g. `DAI`) allow for so called "flash minting", which allows tokens to be minted for the duration
+Some tokens (e.g. `DAI`) allow for so called "flash minting", which will enable tokens to be minted for the duration
 of one transaction only, provided they are returned to the token contract by the end of the
 transaction.
 
@@ -139,7 +138,7 @@ extortion attempt against users of the blocked contract.
 
 Some tokens can be paused by an admin (e.g. `BNB`, `ZIL`).
 
-Similary to the blocklist issue above, an admin controlled pause feature opens users
+Similar to the blocklist issue above, an admin controlled pause feature opens users
 of the token to risk from a malicious or compromised token owner.
 
 *example*: [Pausable.sol](./src/Pausable.sol)
@@ -166,15 +165,15 @@ Integrators may need to add special cases to handle this logic if working with s
 
 ## Revert on Zero Value Transfers
 
-Some tokens (e.g. `LEND`) revert when transfering a zero value amount.
+Some tokens (e.g. `LEND`) revert when transferring a zero value amount.
 
 *example*: [RevertZero.sol](./src/RevertZero.sol)
 
 ## Multiple Token Addresses
 
 Some proxied tokens have multiple addresses. 
-As an example consider the following snippet. `rescueFunds` is intended to allow the contract owner
-to return non pool tokens that were accidentaly sent to the contract. However, it assumes a single
+For example, consider the following snippet. `rescueFunds` is intended to allow the contract owner
+to return non-pool tokens that were accidentally sent to the contract. However, it assumes a single
 address per token and so would allow the owner to steal all funds in the pool.
 
 ```solidity
@@ -238,7 +237,7 @@ This may cause issues when trying to consume metadata from these tokens.
 
 Some tokens (e.g. openzeppelin) revert when attempting to transfer to `address(0)`.
 
-This may break systems that expect to be able to burn tokens by transfering them to `address(0)`.
+This may break systems that expect to be able to burn tokens by transferring them to `address(0)`.
 
 *example*: [RevertToZero.sol](./src/RevertToZero.sol)
 
@@ -247,7 +246,7 @@ This may break systems that expect to be able to burn tokens by transfering them
 Some tokens do not revert on failure, but instead return `false` (e.g.
 [ZRX](https://etherscan.io/address/0xe41d2489571d322189246dafa5ebde1f4699f498#code)).
 
-While this is technicaly compliant with the ERC20 standard, it goes against common solidity coding
+While this is technically compliant with the ERC20 standard, it goes against common solidity coding
 practices and may be overlooked by developers who forget to wrap their calls to `transfer` in a
 `require`.
 
