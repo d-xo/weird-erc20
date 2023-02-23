@@ -1,0 +1,14 @@
+{
+  "name": "weird-erc20",
+  "version": "1.0.0",
+  "description": "Minimal example implementations in Solidity of ERC20 tokens with behaviour that may be surprising or unexpected",
+  "bugs": "https://github.com/d-xo/weird-erc20/issues",
+  "author": "dxo <6689924+d-xo@users.noreply.github.com>",
+  "files": [
+    "src/*"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/d-xo/weird-erc20.git"
+  }
+}
