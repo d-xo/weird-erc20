@@ -12,8 +12,14 @@ contract Proxy {
     // --- init ---
 
     constructor(uint totalSupply) public {
-        give(msg.sender);
+
+        // Manual give()
+        bytes32 slot = ADMIN_KEY;
+        address usr = msg.sender;
+        assembly { sstore(slot, usr) }
+
         upgrade(address(new ERC20(totalSupply)));
+
     }
 
     // --- auth ---
