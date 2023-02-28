@@ -11,7 +11,7 @@ developers in the wild.
 
 This makes building smart contracts that interface directly with ERC20 tokens challenging to say the
 least, and smart contract developers should in general default to the following patterns when
-interacting with external code is required:
+interaction with external code is required:
 
 1. A contract level allowlist of known good tokens.
 2. Direct interaction with tokens should be performed in dedicated wrapper contracts at the edge of
@@ -139,7 +139,7 @@ extortion attempt against users of the blocked contract.
 
 Some tokens can be paused by an admin (e.g. `BNB`, `ZIL`).
 
-Similar to the blocklist issue above, an admin controlled pause feature opens users
+Similary to the blocklist issue above, an admin controlled pause feature opens users
 of the token to risk from a malicious or compromised token owner.
 
 *example*: [Pausable.sol](./src/Pausable.sol)
