@@ -39,7 +39,7 @@ behaviours to avoid.
 
 Some tokens allow reentrant calls on transfer (e.g. `ERC777` tokens).
 
-This has been exploited in the wild on multiple occasions (e.g. [imBTC uniswap pool
+This has been exploited in the wild on multiple occasions (e.g. [imBTC Uniswap pool
 drained](https://defirate.com/imbtc-uniswap-hack/), [lendf.me
 drained](https://defirate.com/dforce-hack/))
 
@@ -54,13 +54,13 @@ Some tokens (e.g. `BNB`) may return a `bool` for some methods, but fail to do so
 resulted in stuck `BNB` tokens in Uniswap v1
 ([details](https://mobile.twitter.com/UniswapProtocol/status/1072286773554876416)).
 
-Some particulary pathological tokens (e.g. Tether Gold) declare a bool return, but then return
+Some particularly pathological tokens (e.g. Tether Gold) declare a bool return, but then return
 `false` even when the transfer was successful
 ([code](https://etherscan.io/address/0x4922a015c4407f87432b179bb209e125432e4a2a#code)).
 
 A good safe transfer abstraction
 ([example](https://github.com/Uniswap/uniswap-v2-core/blob/4dd59067c76dea4a0e8e4bfdda41877a6b16dedc/contracts/UniswapV2Pair.sol#L44))
-can help somewhat, but note that the existance of Tether Gold makes it impossible to correctly handle
+can help somewhat, but note that the existence of Tether Gold makes it impossible to correctly handle
 return values for all tokens.
 
 Two example tokens are provided:
@@ -81,17 +81,17 @@ details](https://medium.com/@1inch.exchange/balancer-hack-2020-a8f7131c980e)).
 
 *example*: [TransferFee.sol](./src/TransferFee.sol)
 
-## Balance Modifications Outside of Transfers (rebasing / airdrops)
+## Balance Modifications Outside of Transfers (rebasing/airdrops)
 
 Some tokens may make arbitrary balance modifications outside of transfers (e.g. Ampleforth style
-rebasing tokens, Compound style airdrops of governance tokens, mintable / burnable tokens).
+rebasing tokens, Compound style airdrops of governance tokens, mintable/burnable tokens).
 
 Some smart contract systems cache token balances (e.g. Balancer, Uniswap-V2), and arbitrary
 modifications to underlying balances can mean that the contract is operating with outdated
 information.
 
 In the case of Ampleforth, some Balancer and Uniswap pools are special cased to ensure that the
-pool's cached balances are atomically updated as part of the rebase prodecure
+pool's cached balances are atomically updated as part of the rebase procedure
 ([details](https://www.ampltalk.org/app/forum/technology-development-17/topic/supported-dex-pools-61/)).
 
 *example*: TODO: implement a rebasing token
@@ -166,7 +166,7 @@ Integrators may need to add special cases to handle this logic if working with s
 
 ## Revert on Zero Value Transfers
 
-Some tokens (e.g. `LEND`) revert when transfering a zero value amount.
+Some tokens (e.g. `LEND`) revert when transferring a zero value amount.
 
 *example*: [RevertZero.sol](./src/RevertZero.sol)
 
@@ -174,7 +174,7 @@ Some tokens (e.g. `LEND`) revert when transfering a zero value amount.
 
 Some proxied tokens have multiple addresses. 
 As an example consider the following snippet. `rescueFunds` is intended to allow the contract owner
-to return non pool tokens that were accidentaly sent to the contract. However, it assumes a single
+to return non pool tokens that were accidentally sent to the contract. However, it assumes a single
 address per token and so would allow the owner to steal all funds in the pool.
 
 ```solidity
@@ -238,7 +238,7 @@ This may cause issues when trying to consume metadata from these tokens.
 
 Some tokens (e.g. openzeppelin) revert when attempting to transfer to `address(0)`.
 
-This may break systems that expect to be able to burn tokens by transfering them to `address(0)`.
+This may break systems that expect to be able to burn tokens by transferring them to `address(0)`.
 
 *example*: [RevertToZero.sol](./src/RevertToZero.sol)
 
@@ -247,7 +247,7 @@ This may break systems that expect to be able to burn tokens by transfering them
 Some tokens do not revert on failure, but instead return `false` (e.g.
 [ZRX](https://etherscan.io/address/0xe41d2489571d322189246dafa5ebde1f4699f498#code)).
 
-While this is technicaly compliant with the ERC20 standard, it goes against common solidity coding
+While this is technically compliant with the ERC20 standard, it goes against common solidity coding
 practices and may be overlooked by developers who forget to wrap their calls to `transfer` in a
 `require`.
 
