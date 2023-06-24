@@ -162,13 +162,15 @@ Some tokens (e.g. OpenZeppelin) will revert if trying to approve the zero addres
 
 Integrators may need to add special cases to handle this logic if working with such a token.
 
-*example*: [ApprovalToZero.sol](./src/ApprovalToZero.sol)
+*example*: [ApprovalToZeroAddress.sol](./src/ApprovalToZeroAddress.sol)
 
 ## Revert on Zero Value Approvals
 
 Some tokens (e.g. `BNB`) revert when approving a zero value amount (i.e. a call to `approve(address, 0)`).
 
 Integrators may need to add special cases to handle this logic if working with such a token.
+
+*example*: [ApprovalWithZeroValue.sol](./src/ApprovalWithZeroValue.sol)
 
 ## Revert on Zero Value Transfers
 
