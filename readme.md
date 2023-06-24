@@ -164,6 +164,12 @@ Integrators may need to add special cases to handle this logic if working with s
 
 *example*: [ApprovalToZero.sol](./src/ApprovalToZero.sol)
 
+## Revert on Zero Value Approvals
+
+Some tokens (e.g. `BNB`) revert when approving a zero value amount (i.e. a call to `approve(address, 0)`).
+
+Integrators may need to add special cases to handle this logic if working with such a token.
+
 ## Revert on Zero Value Transfers
 
 Some tokens (e.g. `LEND`) revert when transferring a zero value amount.
