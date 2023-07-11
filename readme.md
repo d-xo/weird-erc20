@@ -253,7 +253,7 @@ This may break systems that expect to be able to burn tokens by transferring the
 ## No Revert on Failure
 
 Some tokens do not revert on failure, but instead return `false` (e.g.
-[ZRX](https://etherscan.io/address/0xe41d2489571d322189246dafa5ebde1f4699f498#code)).
+[ZRX](https://etherscan.io/address/0xe41d2489571d322189246dafa5ebde1f4699f498#code), [EURS](https://etherscan.io/token/0xdb25f211ab05b1c97d595516f45794528a807ad8#code)).
 
 While this is technically compliant with the ERC20 standard, it goes against common solidity coding
 practices and may be overlooked by developers who forget to wrap their calls to `transfer` in a
