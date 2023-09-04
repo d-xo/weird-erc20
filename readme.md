@@ -284,3 +284,9 @@ This has been used to exploit etherdelta users in the wild ([reference](https://
 Some tokens ([DAI, RAI, GLM, STAKE, CHAI, HAKKA, USDFL, HNY](https://github.com/yashnaman/tokensWithPermitFunctionList/blob/master/hasDAILikePermitFunctionTokenList.json)) have a `permit()` implementation that does not follow [EIP2612](https://eips.ethereum.org/EIPS/eip-2612). Tokens that do not support permit may not revert, which [could lead to the execution of later lines of code in unexpected scenarios](https://media.dedaub.com/phantom-functions-and-the-billion-dollar-no-op-c56f062ae49f). [Uniswap's Permit2](https://github.com/Uniswap/permit2) may provide a more compatible alternative.
 
 *example*: [DaiPermit.sol](./src/DaiPermit.sol)
+
+## Transfer of less than `amount`
+
+Some tokens (e.g., `cUSDCv3`) contain a special case for `amount == type(uint256).max` in their transfer functions that results in only the user's balance being transferred. 
+
+This may cause issues with systems that transfer a user-supplied `amount` to their contract and then credit the user with the same value in storage (e.g., Vault-type systems) without checking the amount that has actually been transferred.
