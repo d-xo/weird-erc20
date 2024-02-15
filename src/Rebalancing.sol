@@ -15,6 +15,12 @@ contract Rebalancer {
     mapping(address => uint256) public userVoteShares;
     mapping(address => mapping(address => uint256)) public allowance;
 
+
+    event Transfer(address indexed _from, address indexed _to, uint256 _value);
+    event Approval(address indexed _owner, address indexed _spender, uint256 _value);
+
+
+
     /// @notice Constructs the contract. It gives all tokens to the calling address for them 
     /// to distribute.
     /// @param _totalVoteShares the total number of initial tokens to mint, becomes the total
@@ -26,6 +32,7 @@ contract Rebalancer {
         voteGrowthPerSecond = _voteGrowthPerYear / secondsPerYear;
         voteGrowthStartTime = block.timestamp;
         userVoteShares[msg.sender] = _totalVoteShares;
+        emit Transfer(0, msg.sender, _totalVoteShares);
         totalVoteShares = _totalVoteShares;
     }
 
@@ -61,7 +68,8 @@ contract Rebalancer {
 
     /// @notice Transfer an amount of tokens to another user
     /// @dev Because we store vote shares instead of votes, we need to convert the 
-    /// specified _value into a share amount before we can modify user balances
+    ///      specified _value into a share amount before we can modify user balances
+    /// @dev Emit `Transfer` event to register token transfer from sender (`msg.sender`)  
     /// @param _to The address to transfer vote tokens to
     /// @param _value The amount of vote tokens to transfer
     /// @return Whether the transfer succeeded or not
@@ -74,7 +82,7 @@ contract Rebalancer {
         uint256 valueAsShares = (_value * ONE) / computeVoteGrowth();
         userVoteShares[_to] +=  valueAsShares;
         userVoteShares[msg.sender] -= valueAsShares;
-
+        emit Transfer(msg.sender, _to, _value);
         return true;
     }
 
@@ -103,12 +111,14 @@ contract Rebalancer {
 
     /// @notice Allow another user to transfer a specified amount of tokens away from the caller
     /// @dev We do not enforce any behavior here. For example, users do not have to set 
-    /// an allowance to zero first before being able to change a users allowance.
+    ///      an allowance to zero first before being able to change a users allowance.
+    /// @dev Emit `Approval` event to register approval of sender address (`msg.sender`)  
     /// @param _spender The address for which the caller will allow token access
     /// @param _value The amount of vote tokens the caller will allow the _spender to transfer
     /// @return Whether the approval succeeded
     function approve(address _spender, uint256 _value) public returns (bool){
         allowance[msg.sender][_spender] = _value;
+        emit Approval(msg.sender, _spender, _value);  
         return true;
     }
 
