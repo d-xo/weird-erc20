@@ -94,7 +94,7 @@ In the case of Ampleforth, some Balancer and Uniswap pools are special cased to 
 pool's cached balances are atomically updated as part of the rebase procedure
 ([details](https://www.ampltalk.org/app/forum/technology-development-17/topic/supported-dex-pools-61/)).
 
-*example*: TODO: implement a rebasing token
+*example*: [Rebalancing.sol](./src/Rebalancing.sol)
 
 ## Upgradable Tokens
 
