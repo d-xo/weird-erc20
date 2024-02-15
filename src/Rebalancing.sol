@@ -32,7 +32,7 @@ contract Rebalancer {
         voteGrowthPerSecond = _voteGrowthPerYear / secondsPerYear;
         voteGrowthStartTime = block.timestamp;
         userVoteShares[msg.sender] = _totalVoteShares;
-        emit Transfer(address(0x00), msg.sender, _totalVoteShares);
+        emit Transfer(address(0), msg.sender, _totalVoteShares);
         totalVoteShares = _totalVoteShares;
     }
 
