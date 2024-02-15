@@ -13,7 +13,7 @@ contract Rebalancer {
     uint256 public immutable totalVoteShares;
 
     mapping(address account => uint256 shares) public userVoteShares;
-    mapping(address account => mapping(address spender => uint256)) public allowances;
+    mapping(address account => mapping(address spender => uint256)) public allowance;
 
 
     event Transfer(address indexed _from, address indexed _to, uint256 _value);
@@ -94,7 +94,7 @@ contract Rebalancer {
     /// @return Whether or not the transfer succeeded. Does not specify what went wrong if it did.
     function transferFrom(address _from, address _to, uint256 _value) public returns (bool){
         // we always check for allowance, msg.sender should use transfer instead
-        if(allowances[_from][_to] < _value ){
+        if(allowance[_from][_to] < _value ){
             return false;
         }
         if(balanceOf(_from) < _value){
@@ -104,7 +104,7 @@ contract Rebalancer {
         uint256 valueAsShares = (_value * ONE) / computeVoteGrowth();
         userVoteShares[_to] +=  valueAsShares;
         userVoteShares[_from] -= valueAsShares;
-        allowances[_from][_to] -= _value;
+        allowance[_from][_to] -= _value;
 
         return true;
     }
@@ -117,7 +117,7 @@ contract Rebalancer {
     /// @param _value The amount of vote tokens the caller will allow the _spender to transfer
     /// @return Whether the approval succeeded
     function approve(address _spender, uint256 _value) public returns (bool){
-        allowances[msg.sender][_spender] = _value;
+        allowance[msg.sender][_spender] = _value;
         emit Approval(msg.sender, _spender, _value);  
         return true;
     }
