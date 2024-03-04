@@ -2,7 +2,7 @@
 pragma solidity ^0.8.24;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
 contract TransferOwnership is Ownable(msg.sender), ReentrancyGuard {
     mapping(address => uint256) private _balances;
@@ -26,7 +26,7 @@ contract TransferOwnership is Ownable(msg.sender), ReentrancyGuard {
 
     function transferOwnership(address newOwner) public onlyOwner override {
         require(newOwner == address(0),"invalid address");
-        super.transferOwnership(newOwner);
+        _transferOwnership(newOwner);
         emit ownershipTransferred(msg.sender, newOwner);
     }
 
