@@ -49,7 +49,7 @@ contract RebasingToken is ERC20 {
         if (supplyDelta < 0) {
             totalSupply = sub(totalSupply, uint256(abs(supplyDelta)));
         } else {
-            totalSupply = sub(totalSupply, uint256(supplyDelta));
+            totalSupply = add(totalSupply, uint256(supplyDelta));
         }
 
         if (totalSupply > MAX_SUPPLY) {
