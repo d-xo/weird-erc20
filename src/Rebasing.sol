@@ -19,7 +19,7 @@ contract RebasingToken is ERC20 {
     address public monetaryPolicy;
 
     /**
-     * @param monetaryPolicy The address of the monetary policy contract to use for authentication.
+     * @notice monetaryPolicy The address of the monetary policy contract to use for authentication.
      */
     modifier onlyMonetaryPolicy() {
         require(msg.sender == monetaryPolicy);
@@ -32,7 +32,7 @@ contract RebasingToken is ERC20 {
     constructor(
         uint _totalSupply,
         address _monetaryPolicy
-    ) public ERC20(_totalSupply) {
+    ) ERC20(_totalSupply) {
         monetaryPolicy = _monetaryPolicy;
     }
 
@@ -47,16 +47,16 @@ contract RebasingToken is ERC20 {
         }
 
         if (supplyDelta < 0) {
-            totalSupply = totalSupply.sub(uint256(supplyDelta.abs()));
+            totalSupply = sub(totalSupply, uint256(abs(supplyDelta)));
         } else {
-            totalSupply = totalSupply.add(uint256(supplyDelta));
+            totalSupply = sub(totalSupply, uint256(supplyDelta));
         }
 
         if (totalSupply > MAX_SUPPLY) {
             totalSupply = MAX_SUPPLY;
         }
 
-        _gonsPerFragment = TOTAL_GONS.div(totalSupply);
+        _gonsPerFragment = TOTAL_GONS / totalSupply;
 
         // From this point forward, _gonsPerFragment is taken as the source of truth.
         // We recalculate a new _totalSupply to be in agreement with the _gonsPerFragment
@@ -71,5 +71,14 @@ contract RebasingToken is ERC20 {
 
         emit LogRebase(epoch, totalSupply);
         return totalSupply;
+    }
+
+    /**
+     *
+     * @dev Converts to absolute value, reverts on overflow.
+     */
+    function abs(int256 a) internal pure returns (int256) {
+        require(a != (int256(1) << 255), "Input must be positive");
+        return a < 0 ? -a : a;
     }
 }
