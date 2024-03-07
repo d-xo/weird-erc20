@@ -290,3 +290,9 @@ Some tokens ([DAI, RAI, GLM, STAKE, CHAI, HAKKA, USDFL, HNY](https://github.com/
 Some tokens (e.g., `cUSDCv3`) contain a special case for `amount == type(uint256).max` in their transfer functions that results in only the user's balance being transferred. 
 
 This may cause issues with systems that transfer a user-supplied `amount` to their contract and then credit the user with the same value in storage (e.g., Vault-type systems) without checking the amount that has actually been transferred.
+
+## Tokens without a `name` / `symbol` / `decimal` functions
+
+ERC20 compliant contracts do no need to implement the `name`, `symbol` nor `decimal` functions as specified by the [EIP20](https://github.com/ethereum/ercs/blob/master/ERCS/erc-20.md) since they are optional.
+
+*example*: [ERC20NoViews.sol](./src/ERC20NoViews.sol)
