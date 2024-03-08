@@ -295,4 +295,4 @@ This may cause issues with systems that transfer a user-supplied `amount` to the
 
 ERC20 compliant contracts do no need to implement the `name`, `symbol` nor `decimal` functions as specified by the [EIP20](https://github.com/ethereum/ercs/blob/master/ERCS/erc-20.md) since they are optional.
 
-*example*: [ERC20NoViews.sol](./src/ERC20NoViews.sol)
+*example*: [ERC20WithoutOptional.sol](./src/ERC20WithoutOptional.sol)

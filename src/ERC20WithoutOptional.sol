@@ -1,4 +1,4 @@
-// Copyright (C) 2017, 2018, 2019, 2020 dbrock, rain, mrchico, d-xo
+// Copyright (C) 2017, 2018, 2019, 2020, 2024 dbrock, rain, mrchico, d-xo, sqrlfirst
 // SPDX-License-Identifier: AGPL-3.0-only
 
 pragma solidity >=0.6.12;
@@ -14,7 +14,7 @@ contract Math {
     }
 }
 
-contract ERC20NoViews is Math {
+contract ERC20WithoutOptional is Math {
     // --- ERC20 Data ---
     string private constant name = "Token";
     string private constant symbol = "TKN";
