@@ -17,12 +17,25 @@ contract TransferOwnership is Ownable(msg.sender), ReentrancyGuard {
         emit Deposit(msg.sender, msg.value);
     }
 
+    function isContract(address _addr) private view returns (bool){
+        uint32 size;
+        assembly {
+            size := extcodesize(_addr)
+        }
+        return (size > 0);
+    }
+
     function withdraw(uint256 amount) public nonReentrant {
         require(amount <= _balances[msg.sender], "Insufficient balance");
+    
+        // Check if the recipient address is not a contract
+        require(!isContract(msg.sender), "Contract addresses are not allowed to withdraw funds");
+    
         _balances[msg.sender] -= amount;
         payable(msg.sender).transfer(amount);
         emit Withdraw(msg.sender, amount);
     }
+
 
     function transferOwnership(address newOwner) public onlyOwner override {
         require(newOwner == address(0),"invalid address");
