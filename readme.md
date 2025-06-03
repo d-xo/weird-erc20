@@ -174,7 +174,7 @@ Integrators may need to add special cases to handle this logic if working with s
 
 ## Revert on Zero Value Transfers
 
-Some tokens (e.g. `LEND`) revert when transferring a zero value amount.
+Some tokens (e.g. `FLOKI`, `LEND`) revert when transferring a zero value amount.
 
 *example*: [RevertZero.sol](./src/RevertZero.sol)
 
