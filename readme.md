@@ -290,3 +290,14 @@ Some tokens ([DAI, RAI, GLM, STAKE, CHAI, HAKKA, USDFL, HNY](https://github.com/
 Some tokens (e.g., `cUSDCv3`) contain a special case for `amount == type(uint256).max` in their transfer functions that results in only the user's balance being transferred. 
 
 This may cause issues with systems that transfer a user-supplied `amount` to their contract and then credit the user with the same value in storage (e.g., Vault-type systems) without checking the amount that has actually been transferred.
+
+## ERC-20 Representation of Native Currency
+
+Some chains have an ERC-20 representation of their native currency to avoid the need for a separate wrapper contract. When reviewing protocols that interact with both the native currency and ERC-20 tokens designed to be deployed on those specific chains, always consider this scenario and assess the correct functioning of the protocol to protect against double spending issues or other vulnerabilities related to this feature.
+
+Examples of such chains include:
+  * Celo with [CELO](https://celoscan.io/address/0x471ece3750da237f93b8e339c536989b8978a438) (address `0x471EcE3750Da237f93B8E339c536989b8978a438`).
+  * Polygon with [POL](https://polygonscan.com/token/0x0000000000000000000000000000000000001010) (address `0x0000000000000000000000000000000000001010`).
+  * zkSync Era with [ETH](https://era.zksync.network/token/0x000000000000000000000000000000000000800a) (address `0x000000000000000000000000000000000000800A`). 
+
+This led to a [critical vulnerability in Uniswap V4](https://blog.openzeppelin.com/uniswap-v4-core-audit#erc-20-representation-of-native-currency-can-be-used-to-drain-native-currency-pools) for CELO network.
