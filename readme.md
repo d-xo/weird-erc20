@@ -94,6 +94,8 @@ In the case of Ampleforth, some Balancer and Uniswap pools are special cased to 
 pool's cached balances are atomically updated as part of the rebase procedure
 ([details](https://www.ampltalk.org/app/forum/technology-development-17/topic/supported-dex-pools-61/)).
 
+For rebasing tokens like Lido's stETH, it's important to note the nuances of tokens-to-shares conversions. Specifically, during transfers, the rebasing nature of stETH introduces rounding errors in 1-2 wei ([details](https://docs.lido.fi/guides/lido-tokens-integration-guide/)). Such minute variations should be considered, especially in systems where exact value correspondence is critical.
+
 *example*: TODO: implement a rebasing token
 
 ## Upgradable Tokens
